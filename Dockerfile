@@ -25,7 +25,8 @@ COPY . /var/www/html
 # 6. تثبيت Composer وتشغيل التثبيت
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
-
+# إنشاء الجسر (Symlink) بقوة السلطة
+RUN php artisan storage:link
 # 7. ضبط صلاحيات الكتابة لمجلدات التخزين
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
