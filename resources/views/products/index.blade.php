@@ -81,7 +81,7 @@
                 
                 <div class="relative">
                     <a href="{{ route('products.show', $product->id) }}" class="block relative aspect-square rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 mb-3">
-                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                     </a>
 
                     {{-- هنا كان الخطأ، تم التصحيح لاستخدام is_admin --}}

@@ -69,7 +69,7 @@
                     {{-- 1. مكان الصورة: نفحص هل المنتج موجود --}}
                     <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-900 rounded-lg overflow-hidden flex items-center justify-center">
                         @if($item->product)
-                            <img src="{{ asset($item->product->image) }}" class="w-full h-full object-cover">
+                            <img src="{{ $item->product->image }}" class="w-full h-full object-cover">
                         @else
                             {{-- في حال كان المنتج محذوفاً نهائياً نظهر علامة --}}
                             <span class="material-symbols-outlined text-zinc-400 text-sm">block</span>

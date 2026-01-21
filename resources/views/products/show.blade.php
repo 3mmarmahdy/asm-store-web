@@ -9,7 +9,7 @@
 
     <div class="w-full h-[45vh] bg-zinc-100 dark:bg-zinc-800 relative">
         @if($product->image)
-            <img src="{{ asset($product->image) }}" class="w-full h-full object-cover" alt="{{ $product->name }}">
+            <img src="{{ $product->image }}" class="w-full h-full object-cover" alt="{{ $product->name }}">
         @endif
         <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white dark:from-zinc-900 to-transparent"></div>
     </div>
