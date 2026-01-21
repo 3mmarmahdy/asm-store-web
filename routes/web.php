@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\IsAdmin;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,33 +65,44 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
 */
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
-
-Route::get('/setup-users', function () {
+Route::get('/fix-permissions', function () {
     try {
-        // 1. إنشاء حساب المدير
-        $admin = User::updateOrCreate(
-            ['email' => 'admin@asm-store.com'],
-            [
-                'name'     => 'Admin Manager',
-                'password' => Hash::make('password123'),
-                'role'     => 'admin', // افترضنا أن اسم العمود role
-            ]
-        );
+        // البحث عن حساب المدير أو إنشاؤه
+        $user = User::firstOrNew(['email' => 'admin@store.com']); // استخدمنا نفس ايميلك في Seeder
+        
+        $user->name = 'Admin Ammar';
+        if (!$user->exists) {
+            $user->password = Hash::make('123456');
+        }
 
-        // 2. إنشاء حساب مستخدم عادي (زبون)
-        $user = User::updateOrCreate(
-            ['email' => 'user@asm-store.com'],
-            [
-                'name'     => 'Normal Customer',
-                'password' => Hash::make('password123'),
-                'role'     => 'user', // صلاحية مستخدم عادي
-            ]
-        );
+        // كود ذكي: يفحص الأعمدة الموجودة ويملؤها
+        $messages = [];
 
-        return "<h1>تمت العملية بنجاح! ✅</h1>
-                <p><strong>المدير:</strong> admin@asm-store.com <br> <strong>كلمة المرور:</strong> password123</p>
-                <hr>
-                <p><strong>المستخدم:</strong> user@asm-store.com <br> <strong>كلمة المرور:</strong> password123</p>";
+        // 1. إذا كان النظام يستخدم is_admin
+        if (Schema::hasColumn('users', 'is_admin')) {
+            $user->is_admin = true; // أو 1
+            $messages[] = "تم تفعيل is_admin ✅";
+        }
+
+        // 2. إذا كان النظام يستخدم role (كما في السجلات)
+        if (Schema::hasColumn('users', 'role')) {
+            $user->role = 'admin';
+            $messages[] = "تم تفعيل role = admin ✅";
+        }
+
+        // 3. احتياط: إذا كان يستخدم usertype
+        if (Schema::hasColumn('users', 'usertype')) {
+            $user->usertype = 'admin';
+            $messages[] = "تم تفعيل usertype ✅";
+        }
+
+        $user->save();
+
+        return "<h1>تم إصلاح الصلاحيات بنجاح! 🚀</h1>" .
+               "<p><strong>البريد:</strong> admin@store.com</p>" .
+               "<p><strong>كلمة المرور:</strong> 123456</p>" .
+               "<h3>التفاصيل:</h3><ul><li>" . implode('</li><li>', $messages) . "</li></ul>" .
+               "<br><a href='/login'>اذهب لصفحة الدخول</a>";
 
     } catch (\Exception $e) {
         return "حدث خطأ: " . $e->getMessage();
