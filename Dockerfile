@@ -33,4 +33,5 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 EXPOSE 80
 
 # 9. الأمر السحري: تنفيذ الميجريشن ثم تشغيل السيرفر
-CMD bash -c "php artisan migrate --force && apache2-foreground"
+# CMD bash -c "php artisan migrate --force && apache2-foreground"
+CMD bash -c "php artisan migrate:fresh --seed --force && apache2-foreground"
