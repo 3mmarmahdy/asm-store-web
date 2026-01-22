@@ -38,35 +38,48 @@ class CartController extends Controller
     }
 
     // 2. إضافة منتج للسلة
+    // نسخة دالة الإضافة مع كاشف الأخطاء
     public function addToCart($productId)
     {
-        $sessionId = Session::getId();
-        $userId = auth()->id();
+        try {
+            $sessionId = \Illuminate\Support\Facades\Session::getId();
+            $userId = auth()->id();
 
-        // البحث عن المنتج
-        if (auth()->check()) {
-            $cartItem = Cart::where('user_id', $userId)
-                            ->where('product_id', $productId)
-                            ->first();
-        } else {
-            $cartItem = Cart::where('session_id', $sessionId)
-                            ->where('product_id', $productId)
-                            ->first();
+            // التحقق من وجود المنتج في السلة
+            if (auth()->check()) {
+                $cartItem = Cart::where('user_id', $userId)
+                                ->where('product_id', $productId)
+                                ->first();
+            } else {
+                $cartItem = Cart::where('session_id', $sessionId)
+                                ->where('product_id', $productId)
+                                ->first();
+            }
+
+            // التحديث أو الإنشاء
+            if ($cartItem) {
+                $cartItem->quantity += 1;
+                $cartItem->save();
+            } else {
+                // هنا غالباً تحدث المشكلة
+                Cart::create([
+                    'product_id' => $productId,
+                    'quantity' => 1,
+                    'session_id' => $sessionId,
+                    'user_id' => $userId,
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'تمت إضافة المنتج للسلة بنجاح ✅');
+
+        } catch (\Exception $e) {
+            // هذا السطر سيطبع الخطأ على الشاشة بدلاً من 500
+            die('<div style="background:#f8d7da; color:#721c24; padding:20px; text-align:center; font-family:sans-serif; direction:ltr;">
+                    <h1>🚨 تم كشف الخطأ!</h1>
+                    <h3>صور هذه الشاشة وارسلها لي:</h3>
+                    <p style="font-size:18px; font-weight:bold; border:2px dashed red; padding:10px;">' . $e->getMessage() . '</p>
+                 </div>');
         }
-
-        if ($cartItem) {
-            $cartItem->quantity += 1;
-            $cartItem->save();
-        } else {
-            Cart::create([
-                'product_id' => $productId,
-                'quantity' => 1,
-                'session_id' => $sessionId,
-                'user_id' => $userId,
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'تمت إضافة المنتج للسلة بنجاح ✅');
     }
 
     // 3. حذف منتج من السلة
