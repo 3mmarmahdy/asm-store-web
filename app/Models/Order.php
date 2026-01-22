@@ -2,13 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['customer_name', 'customer_phone', 'address', 'total_amount', 'status', 'session_id'];
+    use HasFactory;
 
-    // الطلب يحتوي على العديد من العناصر (OrderItems)
+    // 🔥 فتح الحماية للسماح بحفظ الطلب 🔥
+    protected $guarded = [];
+
+    // علاقة الطلب بالمستخدم
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // علاقة الطلب بالمنتجات
     public function items()
     {
         return $this->hasMany(OrderItem::class);

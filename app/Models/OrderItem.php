@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
 {
-    protected $fillable = ['order_id', 'product_id', 'quantity', 'price'];
+    use HasFactory;
+
+    // 🔥 فتح الحماية للسماح بحفظ التفاصيل 🔥
+    protected $guarded = [];
 
     public function order()
     {
@@ -15,7 +19,6 @@ class OrderItem extends Model
 
     public function product()
     {
-        // التعديل هنا: جلب المنتج حتى لو كان محذوفاً (حذف ناعم)
-        return $this->belongsTo(Product::class)->withTrashed();
+        return $this->belongsTo(Product::class);
     }
 }
