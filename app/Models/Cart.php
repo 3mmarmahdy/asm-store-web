@@ -9,16 +9,24 @@ class Cart extends Model
 {
     use HasFactory;
 
-    // السماح بتعبئة هذه البيانات
+    // 🔥 هذا هو الجزء الناقص الذي يسبب الخطأ 500 🔥
+    // نحن نسمح هنا للكود بتعبئة هذه البيانات
     protected $fillable = [
-    'product_id', 
-    'quantity', 
-    'session_id', 
-    'user_id' // <--- تمت الإضافة
-];
-    // علاقة السلة بالمنتج (كل سطر في السلة يملك منتجاً واحداً)
+        'user_id',
+        'product_id',
+        'quantity',
+        'session_id',
+    ];
+
+    // علاقة السلة مع المنتج
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+    
+    // علاقة السلة مع المستخدم
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
