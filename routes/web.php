@@ -185,14 +185,11 @@ Route::get('/search', [App\Http\Controllers\ProductController::class, 'search'])
 
 // 2. مجموعة السلة والشراء (محمية - تتطلب تسجيل دخول)
 Route::middleware('auth')->group(function () {
-    
-    // بمجرد أن يحاول الدخول لأي رابط هنا وهو غير مسجل، لارافيل سيحوله لصفحة الدخول تلقائياً
+    // راوتات السلة
     Route::post('/cart/add/{id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
     Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
-    Route::get('/checkout', [App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
-    // ... وباقي راوتات الشراء والطلب
-});
-Route::get('/clear-cache', function() {
-    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-    return '<h1>✅ تم تنظيف الكاش بنجاح!</h1>';
+    
+    // 👇 راوتات الشراء (الجديدة فقط) 👇
+    Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
 });

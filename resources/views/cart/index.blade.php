@@ -15,7 +15,8 @@
             <div class="flex gap-4 bg-white dark:bg-zinc-800 p-3 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-700/50">
                 
                 <div class="w-24 h-24 bg-zinc-100 dark:bg-zinc-900 rounded-xl overflow-hidden shrink-0">
-                    <img src="{{ asset($item->product->image) }}" class="w-full h-full object-cover">
+                    {{-- التعديل: إزالة asset وعرض الصورة مباشرة --}}
+                <img src="{{ $item->product->image }}" alt="{{ $item->product->name }}" class="w-20 h-20 object-cover rounded-lg border border-zinc-200 dark:border-zinc-700">
                 </div>
 
                 <div class="flex-1 flex flex-col justify-between py-1">
@@ -46,14 +47,9 @@
                     <span class="text-zinc-500 dark:text-zinc-400 font-bold">المجموع الكلي:</span>
                     <span class="text-2xl font-black text-zinc-900 dark:text-white">{{ $total }} <span class="text-sm font-normal text-zinc-500">ر.ي</span></span>
                 </div>
-                <a href="{{ route('cart.checkout') }}" class="w-full block text-center bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition shadow-lg transform active:scale-95">
-                <div class="flex items-center justify-center gap-2">
-        <span class="material-icons">whatsapp</span>
-        <span>إتمام الطلب عبر واتساب</span>
-    </div>
-            </a>
-            </div>
-        </div>
+                <a href="{{ route('checkout.index') }}" class="w-full block text-center bg-primary hover:bg-yellow-600 text-white font-bold py-4 rounded-xl transition shadow-lg transform active:scale-95">
+                متابعة الشراء (تعبئة العنوان)
+                </a>
 
     @else
         <div class="flex flex-col items-center justify-center py-20 text-center">
