@@ -79,4 +79,67 @@ class CheckoutController extends Controller
 
         return redirect()->away($whatsappUrl);
     }
+    // دالة حفظ الطلب وإرسال الواتساب (المحرك المفقود)
+    public function store(Request $request)
+    {
+        // 1. التحقق من البيانات
+        $request->validate([
+            'phone' => 'required',
+            'address' => 'required', // تأكد أن حقل العنوان في الفورم اسمه address
+        ]);
+
+        $user = auth()->user();
+        
+        // 2. جلب السلة
+        $cartItems = Cart::where('user_id', $user->id)->with('product')->get();
+        
+        if($cartItems->isEmpty()){
+            return redirect()->route('products.index');
+        }
+
+        $total = $cartItems->sum(fn($item) => $item->product->price * $item->quantity);
+
+        // 3. حفظ الطلب في قاعدة البيانات (للأدمن)
+        $order = Order::create([
+            'user_id' => $user->id,
+            'customer_name' => $request->name ?? $user->name, // يمكن تعديل الاسم
+            'customer_phone' => $request->phone,
+            'address' => $request->address,
+            'total_amount' => $total,
+            'status' => 'pending'
+        ]);
+
+        // 4. حفظ تفاصيل المنتجات
+        foreach ($cartItems as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price,
+            ]);
+        }
+
+        // 5. 🔥 تنظيف السلة (مهم جداً) 🔥
+        Cart::where('user_id', $user->id)->delete();
+
+        // 6. تجهيز رسالة الواتساب (الإشعار)
+        $msg = "طلب جديد (#{$order->id}) 📦\n";
+        $msg .= "👤 العميل: {$user->name}\n";
+        $msg .= "📱 جوال: {$request->phone}\n";
+        $msg .= "📍 العنوان: {$request->address}\n";
+        $msg .= "💰 الإجمالي: {$total} ريال\n";
+        $msg .= "------------------\n";
+        $msg .= "المنتجات:\n";
+        foreach ($cartItems as $item) {
+            $msg .= "- {$item->product->name} (x{$item->quantity})\n";
+        }
+
+        // رقم جوالك (المدير)
+        $myPhone = "967734464015"; 
+        
+        // التوجيه للواتساب
+        $whatsappUrl = "https://wa.me/$myPhone?text=" . urlencode($msg);
+
+        return redirect()->away($whatsappUrl);
+    }
 }

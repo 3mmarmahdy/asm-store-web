@@ -11,6 +11,7 @@
     <h1 class="text-2xl font-black mb-2 text-zinc-900 dark:text-white">إتمام الطلب</h1>
     <p class="text-sm text-zinc-500 mb-8">يرجى تعبئة بيانات التوصيل</p>
 
+    {{-- بداية الفورم المصحح --}}
     <form action="{{ route('checkout.store') }}" method="POST" class="space-y-6">
         @csrf
 
@@ -21,18 +22,21 @@
             </h3>
             
             <div class="space-y-4">
+                {{-- 1. تعديل اسم الحقل ليصبح name --}}
                 <div>
                     <label class="block text-xs font-bold mb-2 text-zinc-500">الاسم الكامل</label>
-                    <input type="text" name="customer_name" required placeholder="مثال: محمد أحمد"
+                    <input type="text" name="name" required value="{{ auth()->user()->name }}" placeholder="مثال: محمد أحمد"
                            class="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border-none focus:ring-2 focus:ring-primary text-zinc-900 dark:text-white transition">
                 </div>
 
+                {{-- 2. تعديل اسم الحقل ليصبح phone --}}
                 <div>
                     <label class="block text-xs font-bold mb-2 text-zinc-500">رقم الهاتف</label>
-                    <input type="tel" name="customer_phone" required placeholder="77xxxxxxx"
+                    <input type="tel" name="phone" required placeholder="77xxxxxxx"
                            class="w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border-none focus:ring-2 focus:ring-primary text-zinc-900 dark:text-white transition">
                 </div>
 
+                {{-- 3. اسم الحقل address صحيح مسبقاً --}}
                 <div>
                     <label class="block text-xs font-bold mb-2 text-zinc-500">العنوان بالتفصيل</label>
                     <textarea name="address" rows="2" required placeholder="المدينة - الحي - أقرب معلم"
