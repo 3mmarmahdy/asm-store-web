@@ -193,8 +193,3 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
 });
-// رابط تشغيل الترحيل (تشغيل المايجريشن) - استخدمه مرة واحدة
-Route::get('/run-migrations', function () {
-    \Illuminate\Support\Facades\Artisan::call('migrate', ["--force" => true]);
-    return '<h1>✅ تم إنشاء جداول الطلبات بنجاح!</h1>';
-});
