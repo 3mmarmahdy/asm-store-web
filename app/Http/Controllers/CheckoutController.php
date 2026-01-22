@@ -10,13 +10,24 @@ use Illuminate\Http\Request;
 class CheckoutController extends Controller
 {
     // 1. عرض صفحة تعبئة البيانات
+    // تحديث الدالة لتمرير المجموع ($total) ومنع الخطأ 500
     public function index()
     {
-        $cartItems = Cart::where('user_id', auth()->id())->get();
+        // 1. جلب السلة مع تفاصيل المنتج
+        $cartItems = Cart::where('user_id', auth()->id())->with('product')->get();
+
+        // 2. إذا السلة فارغة، ارجعه للمنتجات
         if($cartItems->isEmpty()){
             return redirect()->route('products.index');
         }
-        return view('checkout.index', compact('cartItems'));
+
+        // 3. 🔥 حساب المجموع (هذا ما كان ينقص الصفحة) 🔥
+        $total = $cartItems->sum(function($item) {
+            return $item->product->price * $item->quantity;
+        });
+
+        // 4. إرسال السلة + المجموع للصفحة
+        return view('checkout.index', compact('cartItems', 'total'));
     }
 
     // 2. حفظ الطلب -> تفريغ السلة -> تحويل للواتساب
