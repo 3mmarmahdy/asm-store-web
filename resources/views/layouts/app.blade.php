@@ -84,7 +84,7 @@
     <div class="fixed bottom-0 left-0 right-0 h-20 bg-background-light/90 dark:bg-background-dark/95 backdrop-blur-lg border-t border-zinc-200 dark:border-zinc-800 z-50">
         <div class="flex justify-around items-center h-full px-4">
             
-            <a href="/" class="flex flex-col items-center gap-1 {{ request()->is('/') ? 'text-primary' : 'text-zinc-500 dark:text-zinc-400' }}">
+            <a href="/" wire:navigate class="flex flex-col items-center gap-1 {{ request()->is('/') ? 'text-primary' : 'text-zinc-500 dark:text-zinc-400' }}">
                 <span class="material-symbols-outlined {{ request()->is('/') ? 'filled' : '' }}">home</span>
                 <span class="text-[10px] font-bold">الرئيسية</span>
             </a>
@@ -113,7 +113,7 @@
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="flex flex-col items-center gap-1 text-zinc-500 dark:text-zinc-400 hover:text-primary">
+                <a href="{{ route('login') }}" wire:navigate class="flex flex-col items-center gap-1 text-zinc-500 dark:text-zinc-400 hover:text-primary">
                     <span class="material-symbols-outlined">login</span>
                     <span class="text-[10px] font-medium">دخول</span>
                 </a>

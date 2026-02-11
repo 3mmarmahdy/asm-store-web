@@ -3,7 +3,7 @@
 @section('content')
 <div class="relative bg-white dark:bg-zinc-900 min-h-screen pb-48">
     
-    <a href="{{ route('products.index') }}" class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/80 dark:bg-black/50 backdrop-blur text-zinc-900 dark:text-white shadow-sm hover:bg-primary transition">
+    <a href="{{ route('products.index') }}" wire:navigate class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/80 dark:bg-black/50 backdrop-blur text-zinc-900 dark:text-white shadow-sm hover:bg-primary transition">
         <span class="material-symbols-outlined">arrow_forward</span>
     </a>
 

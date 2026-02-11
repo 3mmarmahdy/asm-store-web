@@ -25,7 +25,7 @@
                 <ul>
                     @foreach($results as $product)
                         <li class="border-b last:border-0 border-zinc-50 dark:border-zinc-800">
-                            <a href="{{ route('products.show', $product->id) }}" class="flex items-center gap-3 p-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
+                        <a href="{{ route('products.show', $product->id) }}" wire:navigate class="flex items-center gap-3 p-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
                                 <img src="{{ $product->image }}" class="w-10 h-10 rounded-lg object-cover" alt="">
                                 <div>
                                     <p class="text-sm font-bold text-zinc-900 dark:text-white">{{ $product->name }}</p>

@@ -72,7 +72,7 @@
             <div class="bg-white dark:bg-zinc-800 rounded-3xl p-3 shadow-sm border border-zinc-100 dark:border-zinc-700/50 group hover:border-primary/50 transition relative flex flex-col justify-between hover:shadow-xl duration-300 h-full">
                 
                 <div class="relative">
-                    <a href="{{ route('products.show', $product->id) }}" class="block relative aspect-square rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 mb-3">
+                    <a href="{{ route('products.show', $product->id) }}" wire:navigate class="block relative aspect-square rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 mb-3">
                         <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                     </a>
                     {{-- تنبيه المخزون المنخفض (يظهر للمدير فقط) --}}
@@ -111,13 +111,7 @@
                     <p class="text-sm font-black text-primary flex items-center gap-1">
                         {{ $product->price }} <span class="text-[10px] text-zinc-400 font-normal">ر.ي</span>
                     </p>
-                    
-                    <form action="{{ route('cart.add', $product->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm hover:bg-primary hover:text-black transition">
-                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
-                        </button>
-                    </form>
+                    <livewire:add-to-cart-button :product-id="$product->id" />
                 </div>
             </div>
             @empty

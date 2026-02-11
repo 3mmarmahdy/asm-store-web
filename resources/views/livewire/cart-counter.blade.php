@@ -1,4 +1,4 @@
-<a href="{{ route('cart.index') }}" class="relative flex flex-col items-center gap-1 {{ request()->routeIs('cart.*') ? 'text-primary' : 'text-zinc-500 dark:text-zinc-400' }}">
+<a href="{{ route('cart.index') }}" wire:navigate class="relative flex flex-col items-center gap-1 {{ request()->routeIs('cart.*') ? 'text-primary' : 'text-zinc-500 dark:text-zinc-400' }}">
     <span class="material-symbols-outlined">shopping_cart</span>
     <span class="text-[10px] font-medium">السلة</span>
     
